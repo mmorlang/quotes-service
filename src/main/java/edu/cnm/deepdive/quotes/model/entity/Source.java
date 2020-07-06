@@ -1,5 +1,8 @@
 package edu.cnm.deepdive.quotes.model.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import edu.cnm.deepdive.quotes.view.FlatQuote;
+import edu.cnm.deepdive.quotes.view.FlatSource;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,7 +24,7 @@ import org.w3c.dom.stylesheets.LinkStyle;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
-public class Source {
+public class Source implements FlatSource {
 
 
   @Id
@@ -50,13 +53,14 @@ public class Source {
       cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 
   @OrderBy("text ASC")
+  @JsonSerialize(contentAs = FlatQuote.class)
   private List<Quote> quotes = new LinkedList<>();
 
-  @NonNull
+@Override
   public Long getId() {
     return id;
   }
-
+@Override
   @NonNull
   public String getName() {
     return name;
@@ -66,12 +70,12 @@ public class Source {
     this.name = name;
   }
 
-
+@Override
   public Date getCreated() {
     return created;
   }
 
-
+@Override
   public Date getUpdated() {
     return updated;
   }
